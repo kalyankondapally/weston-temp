@@ -5549,23 +5549,24 @@ weston_load_module(const char *name, const char *entrypoint)
 	 * our buffer is an error here. */
 	if (len >= sizeof path)
 		return NULL;
-
+	    fprintf(stderr, "kalyan: dlopen %s \n", path);
 	module = dlopen(path, RTLD_NOW | RTLD_NOLOAD);
 	if (module) {
 		weston_log("Module '%s' already loaded\n", path);
 		dlclose(module);
 		return NULL;
 	}
-
+	    fprintf(stderr, "kalyan: dlopen2 %s \n", path);
 	weston_log("Loading module '%s'\n", path);
 	module = dlopen(path, RTLD_NOW);
 	if (!module) {
 		weston_log("Failed to load module: %s\n", dlerror());
 		return NULL;
 	}
-
+	    fprintf(stderr, "kalyan: dlopen3 %s \n", path);
 	init = dlsym(module, entrypoint);
 	if (!init) {
+		    fprintf(stderr, "kalyan: dlopen4 failed %s \n", path);
 		weston_log("Failed to lookup init function: %s\n", dlerror());
 		dlclose(module);
 		return NULL;
@@ -5661,10 +5662,12 @@ weston_compositor_load_backend(struct weston_compositor *compositor,
 
 	if (backend >= ARRAY_LENGTH(backend_map))
 		return -1;
-
+	    fprintf(stderr, "kalyan: weston_compositor_load_backend %s \n", backend_map[backend]);
 	backend_init = weston_load_module(backend_map[backend], "weston_backend_init");
-	if (!backend_init)
+	if (!backend_init) {
+	    fprintf(stderr, "kalyan: backend loading failed \n");
 		return -1;
+	}
 
 	if (backend_init(compositor, config_base) < 0) {
 		compositor->backend = NULL;

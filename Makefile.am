@@ -230,7 +230,7 @@ libsession_helper_la_LIBADD += $(LIBDRM_LIBS)
 endif
 
 if ENABLE_IAHWC_COMPOSITOR
-libsession_helper_la_LIBADD += $(LIBDRM_LIBS)
+libsession_helper_la_LIBADD += $(LIBDRM_LIBS) $(GBM_LIBS)
 endif
 
 if ENABLE_DBUS
@@ -271,7 +271,7 @@ weston_launch_LDADD += $(LIBDRM_LIBS)
 endif
 
 if ENABLE_IAHWC_COMPOSITOR
-weston_launch_LDADD += $(LIBDRM_LIBS)
+weston_launch_LDADD += $(LIBDRM_LIBS) $(GBM_LIBS)
 endif
 
 if ENABLE_SETUID_INSTALL
@@ -420,10 +420,17 @@ iahwc_backend_la_LIBADD =				\
 	$(DRM_COMPOSITOR_LIBS)			\
 	$(INPUT_BACKEND_LIBS)			\
 	libshared.la				\
-	$(CLOCK_GETTIME_LIBS)
+	$(CLOCK_GETTIME_LIBS)			\
+	$(DRM_LIBS) \
+	$(GBM_LIBS) \
+	$(EGL_LIBS) \
+	-lgbm \
+	-lm
+	 echo $(GBM_LIBS)
 iahwc_backend_la_CFLAGS =				\
 	$(COMPOSITOR_CFLAGS)			\
 	$(EGL_CFLAGS)				\
+	$(GBM_CFLAGS) \
 	$(IAHWC_COMPOSITOR_CFLAGS)		\
 	$(AM_CFLAGS)
 iahwc_backend_la_SOURCES =			\

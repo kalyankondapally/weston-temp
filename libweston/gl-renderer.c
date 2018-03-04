@@ -1391,6 +1391,7 @@ gl_renderer_read_pixels(struct weston_output *output,
 static void
 gl_renderer_flush_damage(struct weston_surface *surface)
 {
+	    fprintf(stderr, "gl_renderer_flush_damage \n");
 	struct gl_renderer *gr = get_renderer(surface->compositor);
 	struct gl_surface_state *gs = get_surface_state(surface);
 	struct weston_buffer *buffer = gs->buffer_ref.buffer;
@@ -1428,6 +1429,7 @@ gl_renderer_flush_damage(struct weston_surface *surface)
 	data = wl_shm_buffer_get_data(buffer->shm_buffer);
 
 	if (!gr->has_unpack_subimage) {
+		    fprintf(stderr, "gl_renderer_flush_damage wl_shm_buffer_begin_access \n");
 		wl_shm_buffer_begin_access(buffer->shm_buffer);
 		for (j = 0; j < gs->num_textures; j++) {
 			glBindTexture(GL_TEXTURE_2D, gs->textures[j]);
@@ -1448,6 +1450,7 @@ gl_renderer_flush_damage(struct weston_surface *surface)
 	glPixelStorei(GL_UNPACK_ROW_LENGTH_EXT, gs->pitch);
 
 	if (gs->needs_full_upload) {
+			    fprintf(stderr, "gl_renderer_flush_damage wl_shm_buffer_begin_access 2 \n");
 		glPixelStorei(GL_UNPACK_SKIP_PIXELS_EXT, 0);
 		glPixelStorei(GL_UNPACK_SKIP_ROWS_EXT, 0);
 		wl_shm_buffer_begin_access(buffer->shm_buffer);
@@ -1467,6 +1470,7 @@ gl_renderer_flush_damage(struct weston_surface *surface)
 	}
 
 	rectangles = pixman_region32_rectangles(&gs->texture_damage, &n);
+	fprintf(stderr, "gl_renderer_flush_damage wl_shm_buffer_begin_access 3 \n");
 	wl_shm_buffer_begin_access(buffer->shm_buffer);
 	for (i = 0; i < n; i++) {
 		pixman_box32_t r;
@@ -2404,6 +2408,7 @@ gl_renderer_surface_copy_content(struct weston_surface *surface,
 		*(uint32_t *)target = pack_color(format, gs->color);
 		return 0;
 	case BUFFER_TYPE_SHM:
+	    fprintf(stderr, "surface copy content \n");
 		gl_renderer_flush_damage(surface);
 		/* fall through */
 	case BUFFER_TYPE_EGL:
@@ -2553,6 +2558,7 @@ gl_renderer_create_surface(struct weston_surface *surface)
 		      &gs->renderer_destroy_listener);
 
 	if (surface->buffer_ref.buffer) {
+		    fprintf(stderr, "gl_renderer_create_surface \n");
 		gl_renderer_attach(surface, surface->buffer_ref.buffer);
 		gl_renderer_flush_damage(surface);
 	}

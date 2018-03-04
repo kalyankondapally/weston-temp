@@ -1798,10 +1798,10 @@ load_iahwc_backend(struct weston_compositor *c,
 	config.base.struct_version = WESTON_IAHWC_BACKEND_CONFIG_VERSION;
 	config.base.struct_size = sizeof(struct weston_iahwc_backend_config);
 	config.configure_device = configure_input_device;
-
+	    fprintf(stderr, "kalyan: weston_compositor_load_backend being called \n");
 	ret = weston_compositor_load_backend(c, WESTON_BACKEND_IAHWC,
 					     &config.base);
-
+	    fprintf(stderr, "kalyan: weston_compositor_load_backend being called %d \n", ret);
 	wet_set_pending_output_handler(c, iahwc_backend_output_configure);
 
 	free(config.gbm_format);
@@ -1822,9 +1822,10 @@ load_backend(struct weston_compositor *compositor, const char *backend,
 		return load_fbdev_backend(compositor, argc, argv, config);
 	else if (strstr(backend, "drm-backend.so"))
 		return load_drm_backend(compositor, argc, argv, config);
-	else if (strstr(backend, "iahwc-backend.so"))
+	else if (strstr(backend, "iahwc-backend.so")) {
+	    fprintf(stderr, "create iahwcbackend \n");
 		return load_iahwc_backend(compositor, argc, argv, config);
-	else if (strstr(backend, "x11-backend.so"))
+	} else if (strstr(backend, "x11-backend.so"))
 		return load_x11_backend(compositor, argc, argv, config);
 	else if (strstr(backend, "wayland-backend.so"))
 		return load_wayland_backend(compositor, argc, argv, config);
