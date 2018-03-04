@@ -572,6 +572,15 @@ usage(int error_code)
 		"  --current-mode\tPrefer current KMS mode over EDID preferred mode\n\n");
 #endif
 
+#if defined(BUILD_IAHWC_COMPOSITOR)
+	fprintf(stderr,
+		"Options for iahwc-backend.so:\n\n"
+		"  --seat=SEAT\t\tThe seat that weston should run on\n"
+		"  --tty=TTY\t\tThe tty to use\n"
+		"  --use-pixman\t\tUse the pixman (CPU) renderer\n"
+		"  --current-mode\tPrefer current KMS mode over EDID preferred mode\n\n");
+#endif
+
 #if defined(BUILD_FBDEV_COMPOSITOR)
 	fprintf(stderr,
 		"Options for fbdev-backend.so:\n\n"

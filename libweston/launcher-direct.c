@@ -47,7 +47,7 @@
 #define KDSKBMUTE	0x4B51
 #endif
 
-#ifdef BUILD_DRM_COMPOSITOR
+#if defined(BUILD_DRM_COMPOSITOR) || defined(BUILD_IAHWC_COMPOSITOR)
 
 #include <xf86drm.h>
 

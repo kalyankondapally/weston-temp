@@ -229,6 +229,10 @@ if ENABLE_DRM_COMPOSITOR
 libsession_helper_la_LIBADD += $(LIBDRM_LIBS)
 endif
 
+if ENABLE_IAHWC_COMPOSITOR
+libsession_helper_la_LIBADD += $(LIBDRM_LIBS)
+endif
+
 if ENABLE_DBUS
 if HAVE_SYSTEMD_LOGIN
 libsession_helper_la_SOURCES +=			\
@@ -263,6 +267,10 @@ weston_launch_CFLAGS=				\
 weston_launch_LDADD = $(PAM_LIBS) $(SYSTEMD_LOGIN_LIBS)
 
 if ENABLE_DRM_COMPOSITOR
+weston_launch_LDADD += $(LIBDRM_LIBS)
+endif
+
+if ENABLE_IAHWC_COMPOSITOR
 weston_launch_LDADD += $(LIBDRM_LIBS)
 endif
 
